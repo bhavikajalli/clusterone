@@ -289,8 +289,7 @@ def device_and_target():
                     cluster=cluster_spec),
             server.target,
     )
-
-    device, target = device_and_target()        
+device, target = device_and_target()        
 
 # Defining graph
 # # tf Graph input
