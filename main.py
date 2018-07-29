@@ -28,12 +28,12 @@ matplotlib.rcParams['figure.dpi'] = 144
 # In[ ]:
 
 
-# data_path = get_data_path(
-#             dataset_name = 'data/bhavikaj/bhavikajalli-clusterone',  # on ClusterOne
-#             local_root = 'asl_alphabet_train/',  # path to local dataset
-#             local_repo = 'asl_alphabet_train',  # local data folder name
-#             path = 'train'  # folder within the data folder
-#             )
+train_dir = get_data_path(
+            dataset_name = 'data/bhavikaj/bhavikajalli-clusterone',  # on ClusterOne
+            local_root = 'asl_alphabet_train/',  # path to local dataset
+            local_repo = '',  # local data folder name
+            path = ''  # folder within the data folder
+            )
 
 
 # In[ ]:
@@ -41,9 +41,9 @@ matplotlib.rcParams['figure.dpi'] = 144
 
 #train_dir = "asl_alphabet_train/"
 #train_dir = "ex/"
-train_dir = "data/bhavikaj/bhavikajalli-clusterone"
+#train_dir = "data/bhavikaj/bhavikajalli-clusterone"
 
-
+imageSize = 50
 def get_data(folder):
     """
     Load the data and labels from the given folder.
@@ -116,8 +116,8 @@ def get_data(folder):
                 img_file = np.asarray(Image.open(folder + folderName + '/' + image_filename)).astype(np.float32)/255.0
                 #Image.open('img1.png')
                 if img_file is not None:
-                    #img_file = skimage.transform.resize(img_file, (imageSize, imageSize, 3))
-                    img_arr = np.asarray(img_file)
+                    img_file = skimage.transform.resize(img_file, (imageSize, imageSize, 3))
+                    img_arr = np.asarray(img_file).astype(np.float32)
                     X.append(img_arr)
                     y.append(label)
 #             i += 1
@@ -184,7 +184,7 @@ batch_size = 128
 display_step = 100
 
 # Network Parameters
-n_input = 200 # ASL data input (img shape: 200*200*3)
+n_input = imageSize # ASL data input (img shape: 200*200*3)
 n_classes = 30 # ASL total classes (0-25 alphabets, 1 space,del,nothing and other digits)
 dropout = 0.5
 
@@ -430,7 +430,7 @@ with tf.device(device):
     train_step = (
             tf.train.AdamOptimizer(learning_rate)
             .minimize(loss_op, global_step=global_step))
-    #sess.run(tf.global_variables_initializer())
+    
     
    
 
