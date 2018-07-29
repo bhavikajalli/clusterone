@@ -28,7 +28,8 @@ matplotlib.rcParams['figure.dpi'] = 144
 # In[8]:
 
 
-train_dir = "asl_alphabet_train/"
+#train_dir = "asl_alphabet_train/"
+train_dir = "data/bhavikaj/bhavikajalli-clusterone"
 def get_data(folder):
     """
     Load the data and labels from the given folder.
@@ -374,45 +375,45 @@ with tf.train.MonitoredTrainingSession(master=target,
 # In[37]:
 
 
-logits = conv_net(x,n_classes, dropout,reuse=True ,is_training=True)
+# logits = conv_net(x,n_classes, dropout,reuse=True ,is_training=True)
 
-# Define loss and optimizer
-loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(
-logits=logits, labels=y))
-optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate)
-train_op = optimizer.minimize(loss_op)
+# # Define loss and optimizer
+# loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(
+# logits=logits, labels=y))
+# optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate)
+# train_op = optimizer.minimize(loss_op)
 
-# Evaluate model (with test logits, for dropout to be disabled)
-correct_pred = tf.equal(tf.argmax(logits, 1), tf.argmax(y, 1))
-accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
+# # Evaluate model (with test logits, for dropout to be disabled)
+# correct_pred = tf.equal(tf.argmax(logits, 1), tf.argmax(y, 1))
+# accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 
-# Initialize the variables (i.e. assign their default value)
-init = tf.global_variables_initializer()
+# # Initialize the variables (i.e. assign their default value)
+# init = tf.global_variables_initializer()
 
 
-with tf.Session() as sess:
-    sess.run(init)
+# with tf.Session() as sess:
+#     sess.run(init)
 
-    # Training cycle
-    for epoch in range(training_epochs):
-            avg_cost = 0.
-            total_batch = int(len(X_train)/batch_size)
-            # Loop over all batches
-            for i in range(total_batch):
-                batch_x, batch_y = next_batch(batch_size,X_train,y_trainHot)
-                # Run optimization op (backprop) and cost op (to get loss value)
-                _, c = sess.run([optimizer, loss_op], feed_dict={x: batch_x,
-                                                              y: batch_y})
-                # Compute average loss
-                avg_cost += c / total_batch
-            # Display logs per epoch step
-            if epoch % display_step == 0:
-                print("Epoch:", '%04d' % (epoch+1), "cost=",                     "{:.9f}".format(avg_cost))
-    print("Optimization Finished!")
+#     # Training cycle
+#     for epoch in range(training_epochs):
+#             avg_cost = 0.
+#             total_batch = int(len(X_train)/batch_size)
+#             # Loop over all batches
+#             for i in range(total_batch):
+#                 batch_x, batch_y = next_batch(batch_size,X_train,y_trainHot)
+#                 # Run optimization op (backprop) and cost op (to get loss value)
+#                 _, c = sess.run([optimizer, loss_op], feed_dict={x: batch_x,
+#                                                               y: batch_y})
+#                 # Compute average loss
+#                 avg_cost += c / total_batch
+#             # Display logs per epoch step
+#             if epoch % display_step == 0:
+#                 print("Epoch:", '%04d' % (epoch+1), "cost=",                     "{:.9f}".format(avg_cost))
+#     print("Optimization Finished!")
 
-    # Test model
-    correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
-    # Calculate accuracy
-    accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
-    print("Accuracy:", accuracy.eval({x: X_test, y: y_testHot}))
+#     # Test model
+#     correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
+#     # Calculate accuracy
+#     accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
+#     print("Accuracy:", accuracy.eval({x: X_test, y: y_testHot}))
 
